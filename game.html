@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Snake Game</title>
+
+    <!-- Font Awesome -->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" />
+    <!-- Bootstrap Core Theme -->
+   
+
+    <style>
+      :root {
+        --primary: #2c3e50;
+        --accent: #18bc9c;
+        --background: #f5f7fa;
+        --text: #212529;
+        --light-text: #6c757d;
+        --danger: #e74c3c;
+      }
+
+      body {
+        font-family: 'Open Sans', sans-serif;
+        background-color: var(--background);
+        color: var(--text);
+        margin: 0;
+      }
+
+      /* --- Navbar --- */
+      .navbar {
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+      }
+
+      .navbar-brand {
+        font-weight: 600;
+        color: var(--primary);
+      }
+
+      .navbar-nav .nav-link {
+        color: var(--text);
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .navbar-nav .nav-link:hover {
+        color: var(--accent);
+        border-bottom: 2px solid var(--accent);
+      }
+
+      .masthead {
+        background-color: var(--primary);
+        color: white;
+        padding: 5rem 0;
+        text-align: center;
+      }
+
+      .masthead h1 {
+        font-family: 'Lora', serif;
+        font-size: 3rem;
+        font-weight: 700;
+      }
+
+      .game-controls {
+        text-align: center;
+        margin-top: 2rem;
+      }
+
+      .game-container {
+        display: flex;
+        justify-content: center;
+        margin: 2rem auto;
+      }
+
+      canvas {
+        background-color: #ffffff;
+        border: 3px solid var(--light-text);
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      canvas:hover {
+        transform: scale(1.01);
+      }
+
+      .btn-start {
+        font-size: 1.25rem;
+        padding: 0.75rem 2rem;
+        background-color: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn-start:hover {
+        background-color: #159b80;
+      }
+
+      footer {
+        padding: 2rem 0;
+        background-color: #fff;
+        text-align: center;
+        color: var(--light-text);
+        border-top: 1px solid #dee2e6;
+      }
+
+      .fa-stack {
+        color: var(--primary);
+      }
+
+      .fa-stack:hover {
+        color: var(--accent);
+      }
+    </style>
+  </head>
+
+  <body>
+   <!-- Navigation -->
+<nav style="background-color: #18bc9c; padding: 1rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000;">
+  <div style="max-width: 1140px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; padding: 0 1rem;">
+    <a style="font-size: 1.5rem; font-weight: bold; color: white; text-decoration: none;">Brian Frandsen</a>
+    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+      <a href="../index.html" style="color: white; text-decoration: none; font-weight: 600; transition: all 0.3s ease; position: relative;">Home</a>
+      <a href="../scratch.html" style="color: white; text-decoration: none; font-weight: 600; transition: all 0.3s ease; position: relative;">About</a>
+    </div>
+  </div>
+</nav>
+
+<style>
+  nav a:hover {
+    color: #ffffffcc;
+  }
+
+  nav a::after {
+    content: "";
+    display: block;
+    height: 2px;
+    background: white;
+    transition: width 0.3s ease;
+    width: 0;
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+  }
+
+  nav a:hover::after {
+    width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    nav div {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+  }
+</style>
+
+    <!-- Header -->
+    <header class="masthead">
+      <div class="container">
+        <div class="site-heading">
+          <h1>Snake Game</h1>
+        </div>
+      </div>
+    </header>
+
+    <!-- Game Start Button -->
+    <div class="game-controls">
+      <button class="btn btn-start" onclick="startGame()">Start Game</button>
+    </div>
+
+    <!-- Game Canvas -->
+    <div class="container game-container">
+      <canvas id="game" width="400" height="400"></canvas>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <ul class="list-inline text-center mb-2">
+          <li class="list-inline-item">
+            <a href="https://www.facebook.com/brian.frandsen.376/">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+        </ul>
+        <div class="small text-muted fst-italic">© Brian Frandsen 2023</div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const canvas = document.getElementById("game");
+      const ctx = canvas.getContext("2d");
+      const scale = 20;
+      const rows = canvas.height / scale;
+      const columns = canvas.width / scale;
+
+      let snake;
+      let food;
+      let gameInterval;
+
+      function startGame() {
+        clearInterval(gameInterval);
+        snake = new Snake();
+        food = new Food();
+        food.pickLocation();
+
+        gameInterval = setInterval(() => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          food.draw();
+          snake.update();
+          snake.draw();
+
+          if (snake.eat(food)) {
+            food.pickLocation();
+          }
+
+          snake.checkCollision();
+        }, 150);
+      }
+
+      window.addEventListener("keydown", (evt) => {
+        const direction = evt.key.replace("Arrow", "");
+        if (snake) snake.changeDirection(direction);
+      });
+
+      function Snake() {
+        this.body = [{ x: scale * 5, y: scale * 5 }];
+        this.xSpeed = scale;
+        this.ySpeed = 0;
+
+        this.draw = function () {
+          ctx.fillStyle = "#18bc9c"; // snake color
+          for (let segment of this.body) {
+            ctx.fillRect(segment.x, segment.y, scale, scale);
+          }
+        };
+
+        this.update = function () {
+          const head = {
+            x: this.body[0].x + this.xSpeed,
+            y: this.body[0].y + this.ySpeed,
+          };
+          this.body.unshift(head);
+          this.body.pop();
+        };
+
+        this.changeDirection = function (direction) {
+          switch (direction) {
+            case "Up":
+              if (this.ySpeed === 0) {
+                this.xSpeed = 0;
+                this.ySpeed = -scale;
+              }
+              break;
+            case "Down":
+              if (this.ySpeed === 0) {
+                this.xSpeed = 0;
+                this.ySpeed = scale;
+              }
+              break;
+            case "Left":
+              if (this.xSpeed === 0) {
+                this.xSpeed = -scale;
+                this.ySpeed = 0;
+              }
+              break;
+            case "Right":
+              if (this.xSpeed === 0) {
+                this.xSpeed = scale;
+                this.ySpeed = 0;
+              }
+              break;
+          }
+        };
+
+        this.eat = function (food) {
+          const head = this.body[0];
+          if (head.x === food.x && head.y === food.y) {
+            this.body.push({});
+            return true;
+          }
+          return false;
+        };
+
+        this.checkCollision = function () {
+          const head = this.body[0];
+          for (let i = 1; i < this.body.length; i++) {
+            if (head.x === this.body[i].x && head.y === this.body[i].y) {
+              alert("Game Over");
+              clearInterval(gameInterval);
+            }
+          }
+
+          if (
+            head.x >= canvas.width ||
+            head.y >= canvas.height ||
+            head.x < 0 ||
+            head.y < 0
+          ) {
+            alert("Game Over");
+            clearInterval(gameInterval);
+          }
+        };
+      }
+
+      function Food() {
+        this.x;
+        this.y;
+
+        this.pickLocation = function () {
+          this.x = Math.floor(Math.random() * columns) * scale;
+          this.y = Math.floor(Math.random() * rows) * scale;
+        };
+
+        this.draw = function () {
+          ctx.fillStyle = "#e74c3c"; // food color
+          ctx.fillRect(this.x, this.y, scale, scale);
+        };
+      }
+    </script>
+  </body>
+</html>
+
+
