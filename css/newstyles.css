@@ -1,0 +1,90 @@
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #f0f0f0;
+  background-color: #121212;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+header {
+  background-color: #1e1e1e;
+  padding: 20px;
+}
+
+.section {
+  padding: 30px;
+  background-color: #2a2a2a;
+  margin: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+nav a {
+  color: #ffffff;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+/* 5. Image styling */
+img {
+  max-width: 10%;
+  height: auto;
+}
+
+/* 6. Video and iframe styling */
+iframe {
+  width: 100%;
+  max-width: 560px;
+  height: 315px;
+  display: block;
+  margin: 20px auto;
+  border: none;
+}
+
+/* 7. Centered list container, but left-aligned content inside */
+ol, ul {
+  display: inline-block;       /* Allows centering as a block */
+  text-align: left;            /* Left-aligns list content */
+  list-style-position: outside;
+  padding-left: 20px;
+  margin: 10px auto;
+}
+
+/* 8. Force vertical stacking of list items */
+li {
+  display: list-item;
+  margin: 8px 0;
+}
+
+/* 9. Indent nested lists */
+ul ul, ol ul, ul ol, ol ol {
+  margin-left: 30px;
+  padding-left: 20px;
+}
+
+/* 10. Optional: change bullet style for nested levels */
+ul ul {
+  list-style-type: circle;
+}
+ul ul ul {
+  list-style-type: square;
+}
+
+/* 11. Footer styling */
+footer {
+  background-color: #1e1e1e;
+  text-align: center;
+  padding: 15px;
+  margin-top: 40px;
+}
+.tableauPlaceholder {
+  max-width: 100%;
+  margin: 2rem auto;
+  border: 2px solid #ccc;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}

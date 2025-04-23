@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <style>
+      body {
+        font-family: 'Open Sans', sans-serif;
+        background-color: #f8f9fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      canvas {
+        background-color: #212529;
+        border: 3px solid #6c757d;
+        border-radius: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="game" width="400" height="400"></canvas>
+
+    <script>
+      const canvas = document.getElementById("game");
+      const ctx = canvas.getContext("2d");
+      const scale = 20;
+      const rows = canvas.height / scale;
+      const columns = canvas.width / scale;
+
+      let snake;
+      let food;
+
+      (function setup() {
+        snake = new Snake();
+        food = new Food();
+        food.pickLocation();
+
+        window.setInterval(() => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          food.draw();
+          snake.update();
+          snake.draw();
+
+          if (snake.eat(food)) {
+            food.pickLocation();
+          }
+
+          snake.checkCollision();
+        }, 150);
+      })();
+
+      window.addEventListener("keydown", (evt) => {
+        const direction = evt.key.replace("Arrow", "");
+        snake.changeDirection(direction);
+      });
+
+      function Snake() {
+        this.body = [
+          { x: scale * 5, y: scale * 5 }
+        ];
+        this.xSpeed = scale;
+        this.ySpeed = 0;
+
+        this.draw = function () {
+          ctx.fillStyle = "#0d6efd";
+          for (let segment of this.body) {
+            ctx.fillRect(segment.x, segment.y, scale, scale);
+          }
+        };
+
+        this.update = function () {
+          const head = { x: this.body[0].x + this.xSpeed, y: this.body[0].y + this.ySpeed };
+          this.body.unshift(head);
+          this.body.pop();
+        };
+
+        this.changeDirection = function (direction) {
+          switch (direction) {
+            case "Up":
+              if (this.ySpeed === 0) {
+                this.xSpeed = 0;
+                this.ySpeed = -scale;
+              }
+              break;
+            case "Down":
+              if (this.ySpeed === 0) {
+                this.xSpeed = 0;
+                this.ySpeed = scale;
+              }
+              break;
+            case "Left":
+              if (this.xSpeed === 0) {
+                this.xSpeed = -scale;
+                this.ySpeed = 0;
+              }
+              break;
+            case "Right":
+              if (this.xSpeed === 0) {
+                this.xSpeed = scale;
+                this.ySpeed = 0;
+              }
+              break;
+          }
+        };
+
+        this.eat = function (food) {
+          const head = this.body[0];
+          if (head.x === food.x && head.y === food.y) {
+            this.body.push({});
+            return true;
+          }
+          return false;
+        };
+
+        this.checkCollision = function () {
+          const head = this.body[0];
+          for (let i = 1; i < this.body.length; i++) {
+            if (head.x === this.body[i].x && head.y === this.body[i].y) {
+              alert("Game Over");
+              this.body = [{ x: scale * 5, y: scale * 5 }];
+              this.xSpeed = scale;
+              this.ySpeed = 0;
+            }
+          }
+
+          if (
+            head.x >= canvas.width ||
+            head.y >= canvas.height ||
+            head.x < 0 ||
+            head.y < 0
+          ) {
+            alert("Game Over");
+            this.body = [{ x: scale * 5, y: scale * 5 }];
+            this.xSpeed = scale;
+            this.ySpeed = 0;
+          }
+        };
+      }
+
+      function Food() {
+        this.x;
+        this.y;
+
+        this.pickLocation = function () {
+          this.x = Math.floor(Math.random() * columns) * scale;
+          this.y = Math.floor(Math.random() * rows) * scale;
+        };
+
+        this.draw = function () {
+          ctx.fillStyle = "#dc3545";
+          ctx.fillRect(this.x, this.y, scale, scale);
+        };
+      }
+    </script>
+  </body>
+</html>
